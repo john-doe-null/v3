@@ -160,6 +160,7 @@
             width: 28px; height: 28px; border-radius: 50%;
             background: rgba(0,0,0,0.45); color: #fff;
             font-size: 14px; cursor: pointer; backdrop-filter: blur(4px);
+            align-items: center; justify-content: center;
             z-index: 5; align-items: center; justify-content: center; line-height: 28px;
             text-align: center; user-select: none; -webkit-user-select: none;
         }
@@ -191,6 +192,7 @@
             display: flex; flex-direction: column; align-items: center; gap: 10px;
             transition: 0.2s; letter-spacing: 1px; flex-shrink: 0;
             box-shadow: 0 12px 40px rgba(15,23,42,0.2);
+            position: relative;
         }
         .home-quick-btn:active { transform: scale(0.97); }
         .home-quick-btn .hq-icon { font-size: 40px; flex-shrink: 0; }
@@ -210,6 +212,7 @@
             width: 28px; height: 28px; border-radius: 50%;
             background: rgba(0,0,0,0.45); color: #fff;
             font-size: 14px; cursor: pointer; backdrop-filter: blur(4px);
+            align-items: center; justify-content: center;
             z-index: 5; align-items: center; justify-content: center; line-height: 28px;
             text-align: center;
         }
@@ -816,7 +819,7 @@
             box-shadow: var(--shadow); margin-bottom: 16px;
         }
         .mine-menu-item {
-            display: flex; align-items: center; gap: 12px; padding: 16px 18px;
+            display: flex; align-items: center; gap: 10px; padding: 11px 15px;
             border-bottom: 1px solid #f8fafc; cursor: pointer; transition: 0.15s;
         }
         .mine-menu-item:last-child { border-bottom: none; }
@@ -1634,7 +1637,7 @@
             <div class="nav-title">我的</div>
         </div>
         <!-- 用户信息 -->
-        <div style="display:flex;align-items:center;gap:14px;padding:16px 18px;margin-bottom:16px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;margin-bottom:10px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
             <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">👤</div>
             <div style="flex:1;">
                 <div style="font-size:17px;font-weight:700;color:#1e293b;">自创家用户</div>
@@ -1643,12 +1646,12 @@
             <span style="color:#cbd5e1;font-size:20px;">›</span>
         </div>
         <!-- 我的家 / 官方体验群 -->
-        <div style="display:flex;gap:10px;margin-bottom:16px;">
-            <button style="flex:1;padding:14px;border-radius:14px;border:none;background:#eff6ff;font-size:14px;font-weight:700;color:#2563eb;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="showToast('我的家功能开发中')">🏠 我的家</button>
-            <button style="flex:1;padding:14px;border-radius:14px;border:none;background:#f0fdf4;font-size:14px;font-weight:700;color:#16a34a;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="showToast('官方体验群功能开发中')">💬 官方体验群</button>
+        <div style="display:flex;gap:10px;margin-bottom:10px;">
+            <button style="flex:1;padding:11px;border-radius:14px;border:none;background:#eff6ff;font-size:14px;font-weight:700;color:#2563eb;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="showToast('我的家功能开发中')">🏠 我的家</button>
+            <button style="flex:1;padding:11px;border-radius:14px;border:none;background:#f0fdf4;font-size:14px;font-weight:700;color:#16a34a;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="showToast('官方体验群功能开发中')">💬 官方体验群</button>
         </div>
         <!-- 积分栏（独立卡片） -->
-        <div style="display:flex;align-items:center;padding:14px 18px;margin-bottom:12px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+        <div style="display:flex;align-items:center;padding:11px 18px;margin-bottom:8px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
             <span style="font-size:28px;">⭐</span>
             <div style="flex:1;margin-left:12px;">
                 <div style="font-size:18px;font-weight:800;color:#d97706;">500 积分</div>
@@ -1657,7 +1660,7 @@
             <button style="padding:8px 18px;border-radius:16px;border:none;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:13px;font-weight:700;cursor:pointer;" onclick="showToast('积分充值功能开发中')">💰 充值</button>
         </div>
         <!-- VIP卡片 -->
-        <div class="vip-card" style="padding:14px 18px;margin-bottom:12px;cursor:pointer;" onclick="navigateTo('page-vip-detail')">
+        <div class="vip-card" style="padding:11px 18px;margin-bottom:8px;cursor:pointer;" onclick="navigateTo('page-vip-detail')">
             <div style="display:flex;align-items:center;gap:10px;">
                 <span style="font-size:24px;">👑</span>
                 <div style="flex:1;">
@@ -1685,18 +1688,13 @@
                 <span class="mine-menu-arrow">›</span>
             </div>
             <div class="mine-menu-item" onclick="navigateTo('page-design-share');renderDesignShare();">
-                <span class="mine-menu-icon">🤝</span>
-                <span class="mine-menu-text">设计方案共创</span>
+                <span class="mine-menu-icon">📋</span>
+                <span class="mine-menu-text">软装选配清单</span>
                 <span class="mine-menu-arrow">›</span>
             </div>
             <div class="mine-menu-item" onclick="navigateTo('page-design-coop');">
                 <span class="mine-menu-icon">🤝</span>
                 <span class="mine-menu-text">设计共创</span>
-                <span class="mine-menu-arrow">›</span>
-            </div>
-            <div class="mine-menu-item" onclick="navigateTo('page-soft-checklist');">
-                <span class="mine-menu-icon">📋</span>
-                <span class="mine-menu-text">软装选配清单</span>
                 <span class="mine-menu-arrow">›</span>
             </div>
         </div>
