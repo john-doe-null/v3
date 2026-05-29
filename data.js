@@ -49,6 +49,15 @@ function downloadLogs() {
     a.click();
     setTimeout(function() { URL.revokeObjectURL(a.href); }, 1000);
 }
+
+function clearCache() {
+    if (!confirm('确定要清除所有缓存吗？\n将包括日志、上传历史、设计历史等数据。')) return;
+    ['app_track_logs', 'upload_history', 'design_history', 'design_share_history'].forEach(function(k) { localStorage.removeItem(k); });
+    logBuffer = [];
+    var countEl = document.getElementById('logCount');
+    if (countEl) countEl.textContent = '0';
+    alert('缓存已清除');
+}
 loadLogs();
 // 初始化日志计数
 var countEl = document.getElementById('logCount');
@@ -918,12 +927,33 @@ function updateEmPreview() {
 
 // ============ 上传历史 ============
 function getHistory() { try { return JSON.parse(localStorage.getItem('upload_history') || '[]'); } catch (e) { return []; } }
+
+function createThumbnail(dataUrl, maxWidth) {
+    return new Promise(function (resolve) {
+        var img = new Image();
+        img.onload = function () {
+            var w = img.width, h = img.height;
+            if (w <= maxWidth) { resolve(dataUrl); return; }
+            var ratio = maxWidth / w;
+            var cv = document.createElement('canvas');
+            cv.width = maxWidth; cv.height = Math.round(h * ratio);
+            var ctx = cv.getContext('2d');
+            ctx.drawImage(img, 0, 0, cv.width, cv.height);
+            resolve(cv.toDataURL('image/jpeg', 0.7));
+        };
+        img.onerror = function () { resolve(dataUrl); };
+        img.src = dataUrl;
+    });
+}
+
 function saveToHistory() {
     if (!uploadedImageData) return;
-    const history = getHistory();
-    history.unshift({ type: currentUploadType, dataUrl: uploadedImageData, date: new Date().toLocaleString('zh-CN') });
-    if (history.length > 20) history.length = 20;
-    localStorage.setItem('upload_history', JSON.stringify(history));
+    createThumbnail(uploadedImageData, 200).then(function (thumb) {
+        var history = getHistory();
+        history.unshift({ type: currentUploadType, dataUrl: thumb, date: new Date().toLocaleString('zh-CN') });
+        if (history.length > 20) history.length = 20;
+        try { localStorage.setItem('upload_history', JSON.stringify(history)); } catch (e) { /* quota exceeded, silently drop */ }
+    });
 }
 
 // 3D效果图历史记录
@@ -948,9 +978,11 @@ function saveDesignToHistory() {
         }
     }
     var history = getDesignHistory();
-    history.unshift({ style: style, dataUrl: imgData, date: new Date().toLocaleString('zh-CN') });
-    if (history.length > 20) history.length = 20;
-    localStorage.setItem('design_history', JSON.stringify(history));
+    createThumbnail(imgData, 200).then(function (thumb) {
+        history.unshift({ style: style, dataUrl: thumb, date: new Date().toLocaleString('zh-CN') });
+        if (history.length > 20) history.length = 20;
+        try { localStorage.setItem('design_history', JSON.stringify(history)); } catch (e) { /* quota exceeded, silently drop */ }
+    });
 }
 
 function showHistory() {
@@ -1025,7 +1057,7 @@ function useHistoryItem(index) {
 function deleteHistoryItem(event, index) {
     event.stopPropagation();
     const history = getHistory(); history.splice(index, 1);
-    localStorage.setItem('upload_history', JSON.stringify(history));
+    try { localStorage.setItem('upload_history', JSON.stringify(history)); } catch (e) { /* ignore */ }
     showHistory();
 }
 
@@ -1958,7 +1990,7 @@ function deleteDesignItem(event, index) {
     event.stopPropagation();
     var history = getDesignHistory();
     history.splice(index, 1);
-    localStorage.setItem('design_history', JSON.stringify(history));
+    try { localStorage.setItem('design_history', JSON.stringify(history)); } catch (e) { /* ignore */ }
     renderDesignHistory();
 }
 
@@ -2085,7 +2117,7 @@ function saveDesignShareRecord() {
     var history = getDesignShareHistory();
     history.unshift(designData);
     if (history.length > 20) history.length = 20;
-    localStorage.setItem('design_share_history', JSON.stringify(history));
+    try { localStorage.setItem('design_share_history', JSON.stringify(history)); } catch (e) { /* ignore */ }
 }
 
 function renderDesignShare() {
